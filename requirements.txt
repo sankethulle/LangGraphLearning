@@ -6,3 +6,4 @@ python-dotenv
 pydantic
 streamlit
 langgraph-checkpoint-sqlite
+langsmith==0.4.13

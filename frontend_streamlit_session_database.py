@@ -3,23 +3,30 @@ from langchain_core.messages import HumanMessage
 from backend_database import chatbot,get_all_threads
 import uuid
 from datetime import datetime
+from langsmith import traceable
+import os
 
+os.environ['LANGCHAIN_PROJECT'] = 'LangGraph_persistant_storage'
 
+@traceable(name='f_generate_threadId')
 def generate_threadId():
     readable_id = datetime.now().strftime("%d %B %Y, %I:%M:%S %p")
     return readable_id
 
+@traceable(name='f_save_thread_to_session')
 def save_thread_to_session(thread_id):
     print(f"[In save_thread_to_session]") 
     if thread_id not in st.session_state['chat_thread']:
         st.session_state['chat_thread'].append(thread_id)    
 
+@traceable(name='f_reset_session')
 def reset_session():
     print(f'[In reset_session]')     
     st.session_state['thread_id'] = generate_threadId()
     st.session_state['message_history'] = []
     save_thread_to_session(st.session_state['thread_id'])  
 
+@traceable(name='f_load_session_chat')
 def load_session_chat(thread_id):
     print(f'[In load_session_chat]')
     values = chatbot.get_state(config={'configurable':{'thread_id':st.session_state['thread_id']}}).values
