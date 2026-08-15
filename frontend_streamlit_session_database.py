@@ -44,7 +44,17 @@ if 'chat_thread' not in st.session_state:
     st.session_state['chat_thread'] = get_all_threads()
 
 save_thread_to_session(st.session_state['thread_id'])
-CONFIG = {'configurable':{'thread_id':st.session_state['thread_id']}}        
+# CONFIG = {'configurable':{'thread_id':st.session_state['thread_id']}}
+CONFIG = {'configurable':{
+               'thread_id':st.session_state['thread_id']
+            },
+          'metadata':{
+              'thread_id':st.session_state['thread_id']
+            },
+            'run_name':'LLM_CALL'
+
+          }
+
 
 st.sidebar.title('Lang-Graph Application')
 if st.sidebar.button("New Chat"):
